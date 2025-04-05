@@ -6,61 +6,63 @@ from kiwipiepy import Kiwi
 from PIL import Image
 import numpy as np
 from datetime import datetime, timedelta
+import os
 
+# 어제 날짜로 폴더 경로 설정
 yesterday = datetime.now() - timedelta(days=1)
-yesterday_str = yesterday.strftime("%Y%m%d")
+date_str = yesterday.strftime("%Y%m%d")
+folder_path = os.path.join(os.getcwd(), date_str)
+os.makedirs(folder_path, exist_ok=True)  # 폴더 없으면 생성
 
-# 파일 읽기
+# 텍스트 파일 경로들
 file_paths = [
-    f"SBS_{yesterday_str}.txt",
-    f"KBS_{yesterday_str}.txt",
-    f"MBC_{yesterday_str}.txt",
-    f"JTBC_{yesterday_str}.txt",
-    f"MBN_{yesterday_str}.txt",
-    f"채널A_{yesterday_str}.txt",
+    os.path.join(folder_path, f"{channel}_{date_str}.txt")
+    for channel in ["SBS", "KBS", "MBC", "JTBC", "MBN", "채널A"]
 ]
 
 all_text = ""
 
 for file_path in file_paths:
-    with open(file_path, "r", encoding="utf-8") as file:
-        all_text += file.read() + " "
+    if os.path.exists(file_path):
+        with open(file_path, "r", encoding="utf-8") as file:
+            all_text += file.read() + " "
 
 # 1️⃣ 특수문자, 숫자 제거
 all_text = re.sub(r"[^가-힣\s]", "", all_text)  # 한글과 공백만 남기기
 
-# 2️⃣ Kiwipiepy를 사용한 명사 추출
+# 2️⃣ Kiwipiepy로 명사 추출
 kiwi = Kiwi()
 tokens = kiwi.tokenize(all_text)
-
-# 명사(NNG: 일반 명사, NNP: 고유 명사)만 추출
 nouns = [token.form for token in tokens if token.tag in ["NNG", "NNP"]]
 
 # 3️⃣ 불용어 제거
-stopwords = set(
-    ["것", "수", "그", "이", "저", "등", "더", "중", "개", "자", "때", "년", "한", "위", "기자","시간", "뉴스", "정도", "오전", "오후"]
-)
-filtered_words = [
-    word for word in nouns if word not in stopwords and len(word) > 1
-]  # 한 글자 단어 제거
+stopwords = set(["것", "수", "그", "이", "저", "등", "더", "중", "개", "자", "때", "년", "한", "위", "기자", "뉴스", "이번", "오전", "오후", "정도"])
+filtered_words = [word for word in nouns if word not in stopwords and len(word) > 1]
 
-# 4️⃣ 단어 빈도수 계산
+# 4️⃣ 단어 빈도수 상위 50개 추출
 word_counts = Counter(filtered_words)
 top_50_words = dict(word_counts.most_common(50))
 
-mask = np.array(Image.open("cloud.png"))  # 하트 모양 이미지 로드
+# 마스크 이미지 로드 (없을 경우 무시)
+mask_path = os.path.join(os.getcwd(), "cloud.png")
+mask = np.array(Image.open(mask_path)) if os.path.exists(mask_path) else None
 
 # 5️⃣ 워드클라우드 생성
 wordcloud = WordCloud(
-    font_path="malgun.ttf",  # Windows: "malgun.ttf", Mac: "AppleGothic"
+    font_path="malgun.ttf",  # Windows 기준
     mask=mask,
     colormap="cool",
     background_color="white",
 ).generate_from_frequencies(top_50_words)
 
-# 6️⃣ 출력
+# 6️⃣ 저장 경로 → 폴더 안으로
+output_path = os.path.join(folder_path, f"{date_str}_wordcloud.png")
+
+# 7️⃣ 출력 및 저장
 plt.figure(figsize=(10, 5))
 plt.imshow(wordcloud, interpolation="bilinear")
 plt.axis("off")
-plt.savefig(f"{yesterday_str}_wordcloud.png", dpi=300, bbox_inches="tight")
+plt.savefig(output_path, dpi=300, bbox_inches="tight")
 plt.show()
+
+print(f"✅ 워드클라우드 저장 완료: {output_path}")
