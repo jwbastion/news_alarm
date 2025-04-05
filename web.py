@@ -142,4 +142,4 @@ else:
 
 image_path1 = f"{date_str}_wordcloud.png"  # 이미지 파일 경로
 image1 = Image.open(image_path1)
-st.image(image1, use_column_width=False, width=600)
+st.image(image1, use_container_width=False, width=600)
