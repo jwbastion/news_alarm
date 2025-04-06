@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 from PIL import Image
+import os
 
 st.markdown(
     """
@@ -29,9 +30,10 @@ st.markdown(
 
 yesterday = datetime.now() - timedelta(days=1)
 date_str = yesterday.strftime("%Y%m%d")
+base_folder = f"{date_str}"
 
 # CSV 파일 로드
-file_path = f"{date_str}\{date_str}_뉴스요약.csv"
+file_path = os.path.join(base_folder, f"{date_str}_뉴스요약.csv")
 data = pd.read_csv(file_path)
 
 # Streamlit 앱 제목
