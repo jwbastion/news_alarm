@@ -31,7 +31,7 @@ yesterday = datetime.now() - timedelta(days=1)
 date_str = yesterday.strftime("%Y%m%d")
 
 # CSV 파일 로드
-file_path = f"{date_str}/{date_str}_뉴스요약.csv"
+file_path = f"{date_str}\{date_str}_뉴스요약.csv"
 data = pd.read_csv(file_path)
 
 # Streamlit 앱 제목
@@ -140,7 +140,7 @@ else:
     )
     # first_row = False
 
-image_path1 = f"{date_str}/{date_str}_wordcloud.png"  # 이미지 파일 경로
+image_path1 = f"{date_str}\{date_str}_wordcloud.png"  # 이미지 파일 경로
 image1 = Image.open(image_path1)
 st.image(image1, use_container_width=False, width=600)
 st.markdown(
