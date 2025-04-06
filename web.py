@@ -142,7 +142,7 @@ else:
     )
     # first_row = False
 
-image_path1 = f"{date_str}\{date_str}_wordcloud.png"  # 이미지 파일 경로
+image_path1 = os.path.join(base_folder, f"{date_str}_wordcloud.png")  # 이미지 파일 경로
 image1 = Image.open(image_path1)
 st.image(image1, use_container_width=False, width=600)
 st.markdown(
