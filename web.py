@@ -27,7 +27,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-yesterday = datetime.now() - timedelta(days=2)
+yesterday = datetime.now() - timedelta(days=1)
 date_str = yesterday.strftime("%Y%m%d")
 
 # CSV 파일 로드
