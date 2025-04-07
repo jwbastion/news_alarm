@@ -53,7 +53,7 @@ st.markdown(
 st.write("---")
 
 # Sidebar 설정
-st.sidebar.header("필터링 옵션")
+# st.sidebar.header("필터링 옵션")
 broadcasting_companies = sorted(data["방송사"].unique())
 categories = ["전체"] + list(data["카테고리"].unique())
 
