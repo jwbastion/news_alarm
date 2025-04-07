@@ -152,12 +152,12 @@ if not filtered_data.empty:
             st.write(row["내용요약"])
 
         st.write("---")
-# else:
+else:
 #     st.markdown(
 #         f'<div class="category">방송사와 카테고리를 선택하세요!</div>',
 #         unsafe_allow_html=True,
 #     )
-#     image_path1 = f"{base_folder}/{date_str}_wordcloud.png"  # 이미지 파일 경로
-#     image1 = Image.open(image_path1)
-#     st.image(image1, use_container_width=False, width=600)
+    image_path1 = f"{base_folder}/{date_str}_wordcloud.png"  # 이미지 파일 경로
+    image1 = Image.open(image_path1)
+    st.image(image1, use_container_width=False, width=600)
 #     # first_row = False
