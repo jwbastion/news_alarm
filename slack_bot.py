@@ -8,7 +8,7 @@ weekdays = ["월요일", "화요일", "수요일", "목요일", "금요일", "�
 weekday_name = weekdays[yesterday.weekday()]
 date = yesterday_str[:4] + "년 " + yesterday_str[4:6] + "월 " + yesterday_str[6:8] + "일 " + weekday_name
 
-url = 'https://hooks.slack.com/services/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'
+url = 'https://hooks.slack.com/services/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'
 headers = {"Content-type": "application/json"}
 payload = {
 	"blocks": [
