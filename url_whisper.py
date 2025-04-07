@@ -1,4 +1,3 @@
-import url_whisper
 import subprocess
 import os
 from pydub import AudioSegment

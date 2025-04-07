@@ -24,4 +24,4 @@ subprocess.run(["python", "git.py"], check=True)
 print("\n[6/6] Slack Bot 전송 중...")
 subprocess.run(["python", "slack_bot.py"], check=True)
 
-print("\n전체 자동화 완료! GitHub 업로드 및 SlackBot 전송송 완료.")
+print("\n전체 자동화 완료! GitHub 업로드 및 SlackBot 전송 완료.")
