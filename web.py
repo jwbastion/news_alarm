@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 from PIL import Image
+import os
 
 st.markdown(
     """
@@ -29,6 +30,16 @@ st.markdown(
 
 yesterday = datetime.now() - timedelta(days=1)
 date_str = yesterday.strftime("%Y%m%d")
+
+# 날짜 폴더 리스트 가져오기
+available_dates = sorted([d for d in os.listdir(".") if os.path.isdir(d) and d.isdigit()])
+
+# 사이드바에서 날짜 선택
+selected_date = st.sidebar.selectbox("날짜를 선택하세요:", available_dates, index=len(available_dates)-1)
+
+# 선택한 날짜로 폴더 경로 및 파일명 설정
+date_str = selected_date
+base_folder = selected_date
 
 # CSV 파일 로드
 file_path = f"{date_str}/{date_str}_뉴스요약.csv"
@@ -149,4 +160,4 @@ else:
     #     "<div style='text-align: center; font-size: 24px; color: #000;'>오늘의 키워드</div>",
     #     unsafe_allow_html=True
     # )
-    st.image(image1, use_column_width=False, width=600)
+    st.image(image1, use_container_width=False, width=600)
