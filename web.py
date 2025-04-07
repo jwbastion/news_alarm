@@ -49,6 +49,15 @@ data = pd.read_csv(file_path)
 st.markdown(
     f'<div class="news-title">{date_str} 뉴스 요약</div>', unsafe_allow_html=True
 )
+
+image_path1 = f"{base_folder}/{date_str}_wordcloud.png"  # 이미지 파일 경로
+image1 = Image.open(image_path1)
+# st.markdown(
+#     "<div style='text-align: center; font-size: 24px; color: #000;'>오늘의 키워드</div>",
+#     unsafe_allow_html=True
+# )
+st.image(image1, use_container_width=False, width=600)
+
 st.write("---")
 
 # Sidebar 설정
@@ -153,11 +162,3 @@ else:
         unsafe_allow_html=True,
     )
     # first_row = False
-
-image_path1 = f"{base_folder}/{date_str}_wordcloud.png"  # 이미지 파일 경로
-image1 = Image.open(image_path1)
-# st.markdown(
-#     "<div style='text-align: center; font-size: 24px; color: #000;'>오늘의 키워드</div>",
-#     unsafe_allow_html=True
-# )
-st.image(image1, use_container_width=False, width=600)
