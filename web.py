@@ -52,10 +52,6 @@ st.markdown(
 
 st.write("---")
 
-image_path1 = f"{base_folder}/{date_str}_wordcloud.png"  # 이미지 파일 경로
-image1 = Image.open(image_path1)
-st.image(image1, use_container_width=False, width=600)
-
 # Sidebar 설정
 st.sidebar.header("필터링 옵션")
 broadcasting_companies = sorted(data["방송사"].unique())
@@ -125,6 +121,10 @@ else:
     ]
 
 if not filtered_data.empty:
+    image_path1 = f"{base_folder}/{date_str}_wordcloud.png"  # 이미지 파일 경로
+    image1 = Image.open(image_path1)
+    st.image(image1, use_container_width=False, width=600)
+    
     # 방송사별로 그룹화
     for broadcast, group in filtered_data.groupby("방송사"):
         first_row = True  # 첫 번째 행인지 체크
@@ -157,4 +157,7 @@ else:
         f'<div class="category">방송사와 카테고리를 선택하세요!</div>',
         unsafe_allow_html=True,
     )
+    image_path1 = f"{base_folder}/{date_str}_wordcloud.png"  # 이미지 파일 경로
+    image1 = Image.open(image_path1)
+    st.image(image1, use_container_width=False, width=600)
     # first_row = False
