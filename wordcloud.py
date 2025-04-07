@@ -59,7 +59,7 @@ wordcloud = WordCloud(
 output_path = os.path.join(folder_path, f"{date_str}_wordcloud.png")
 
 # 7️⃣ 출력 및 저장
-plt.figure(figsize=(10, 5))
+plt.figure(figsize=(7, 5))
 plt.imshow(wordcloud, interpolation="bilinear")
 plt.axis("off")
 plt.savefig(output_path, dpi=300, bbox_inches="tight")
