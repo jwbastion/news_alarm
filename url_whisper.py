@@ -4,6 +4,9 @@ from pydub import AudioSegment
 from openai import OpenAI
 from datetime import datetime, timedelta
 import pytz
+from dotenv import load_dotenv
+load_dotenv()
+
 
 # 날짜 설정
 KST = pytz.timezone('Asia/Seoul')
@@ -11,6 +14,16 @@ yesterday = datetime.now(KST) - timedelta(days=1)
 yesterday_str = yesterday.strftime("%Y%m%d")
 
 # Whisper API 클라이언트
+# 현재 파일의 상위 디렉토리로 이동
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# 상위 디렉토리의 .env 파일 경로 지정
+env_path = os.path.join(BASE_DIR, ".env")
+
+# .env 파일 로드
+load_dotenv(dotenv_path=env_path)
+
+# OpenAI 클라이언트 초기화
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # 저장 폴더 경로

@@ -1,23 +1,32 @@
 import os
 import csv
+import re
+from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
+from openai import OpenAI
 from langchain.chains.summarize import load_summarize_chain
 from langchain.prompts import PromptTemplate
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from datetime import datetime, timedelta
-import re
 
 # 1. API 키 로딩
 load_dotenv()
-api_key = os.getenv("OPENAI_API_KEY")
-if not api_key:
-    raise ValueError("OPENAI_API_KEY가 설정되지 않았습니다.")
+# 현재 파일의 상위 디렉토리로 이동
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# 상위 디렉토리의 .env 파일 경로 지정
+env_path = os.path.join(BASE_DIR, ".env")
+
+# .env 파일 로드
+load_dotenv(dotenv_path=env_path)
+
+# OpenAI 클라이언트 초기화
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # 2. 언어 모델 (Chat 기반)
 llm = ChatOpenAI(model_name="gpt-4o", temperature=0)
 
-# 3. 한국어 요약 프롬프트
+# 3. 요약 프롬프트 설정
 korean_prompt = PromptTemplate.from_template("""
 다음 뉴스 기사 전체 내용을 정치 / 사회 / 국제 / 경제 / 기타 카테고리로 구분하여 요약해 주세요.
 
@@ -34,7 +43,7 @@ korean_prompt = PromptTemplate.from_template("""
 카테고리별 요약:
 """)
 
-# 4. 요약 체인
+# 4. 요약 체인 생성
 chain = load_summarize_chain(
     llm=llm,
     chain_type="map_reduce",
@@ -42,27 +51,31 @@ chain = load_summarize_chain(
     combine_prompt=korean_prompt
 )
 
-# 5. 요약 함수
+# 5. 요약 함수 정의
 def summarize_text(text):
     splitter = RecursiveCharacterTextSplitter(chunk_size=1500, chunk_overlap=100)
     docs = splitter.create_documents([text])
     return chain.invoke({"input_documents": docs})["output_text"]
 
-# 6. 어제 날짜로 파일명 결정
+# 6. 날짜 및 경로 설정
 yesterday = datetime.now() - timedelta(days=1)
 date_str = yesterday.strftime("%Y%m%d")
+folder_path = os.path.join(os.getcwd(), date_str)
+os.makedirs(folder_path, exist_ok=True)
 
-# 7. 처리할 채널 이름 목록
+# 7. 채널 목록
 channels = ["SBS", "JTBC", "KBS", "MBC", "MBN", "채널A"]
 
-# 8. 전체 CSV 저장을 위한 준비
-csv_output_file = f"{date_str}_뉴스요약.csv"
+# 8. CSV 저장 파일 경로
+csv_output_file = os.path.join(folder_path, f"{date_str}_뉴스요약.csv")
+
+# 9. 요약 결과 CSV로 저장
 with open(csv_output_file, "w", newline='', encoding="utf-8-sig") as csvfile:
     writer = csv.writer(csvfile)
-    writer.writerow(["방송사", "카테고리", "내용요약"])  # 헤더
+    writer.writerow(["방송사", "카테고리", "내용요약"])
 
     for channel in channels:
-        input_filename = f"{channel}_{date_str}.txt"
+        input_filename = os.path.join(folder_path, f"{channel}_{date_str}.txt")
 
         if not os.path.exists(input_filename):
             print(f"파일 없음: {input_filename}")
@@ -76,15 +89,13 @@ with open(csv_output_file, "w", newline='', encoding="utf-8-sig") as csvfile:
 
             summary_text = summarize_text(full_text)
 
-            # 줄 단위로 파싱 (예: 정치: . / 경제: .)
             for line in summary_text.strip().split("\n"):
                 if ":" in line:
                     category, summary = line.split(":", 1)
-                    clean_category = re.sub(r"[^\w가-힣]", "", category.strip())
                     writer.writerow([channel, category.strip(), summary.strip()])
 
-            print(f"저장 완료 (CSV 병합): {channel}")
+            print(f"저장 완료: {channel}")
         except Exception as e:
-            print(f"❌ 오류 발생: {e}")
+            print(f"오류 발생: {e}")
 
-print(f"\n전체 뉴스 요약 CSV 파일 생성 완료: {csv_output_file}")
+print(f"\n전체 뉴스 요약 CSV 저장 완료 → {csv_output_file}")
