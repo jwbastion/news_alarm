@@ -15,6 +15,10 @@ def commit_csv_png():
         subprocess.run(["git", "commit", "-m", f"Add CSV and PNG files for {yesterday_str}"], check=True)
         # 원격 저장소로 푸시
         subprocess.run(["git", "push", "origin", "main"], check=True)
+<<<<<<< HEAD
+=======
+        
+>>>>>>> ead10d5621557003dd54b3b0946238eb751e7f6a
         print("CSV와 PNG 파일 커밋 완료!")
     except subprocess.CalledProcessError as e:
         print(f"Git 커밋 실패: {e}")
