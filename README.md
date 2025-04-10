@@ -6,6 +6,14 @@
 작업 스케줄러를 이용하여 자동으로 업로드합니다.
 
 ## 프로젝트 구조
+### Tools
++ **Youtube URL**: Youtube Data API v3, PlayList
++ **Generate_Audio**: yt-dlp
++ **Audio Transcription**: OpenAI API Whisper-1
++ **News Summary**: OpenAI API GPT-4o
++ **WordCloud**: wordcloud
++ **News Website**: streamlit
+ 
 ### 주요 소스코드
 | 파일명                     | 설명                                               |
 | -------------------------- | -------------------------------------------------- |
