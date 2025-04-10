@@ -2,7 +2,7 @@
   
 ## 개요
 매일 오전 9시! 전날의 주요 뉴스를 빠르고 간단하게 확인할 수 있는 자동 봇 서비스
-
+SBS 8시 뉴스, KBS 9시 뉴스, MBC 뉴스데스크, JTBC 뉴스룸, 채널A 뉴스A, MBN 뉴스7 이상 6개 채널을 제공합니다.
 작업 스케줄러를 이용하여 자동으로 업로드합니다.
 
 ## 프로젝트 구조
@@ -44,3 +44,6 @@ pip install -r requirements.txt
 ```
 
 2️⃣ 작업 스케줄러에서 `run_all.py`를 실행하여 자동화 봇을 시작합니다.
+
+## 🔗 참조
++ **FFmpeg 설치**: [FFmpeg 설치 방법(Windows OS)](https://angelplayer.tistory.com/351)
